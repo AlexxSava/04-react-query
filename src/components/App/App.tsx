@@ -1,5 +1,7 @@
 import { useState } from "react";
+import { useQuery } from '@tanstack/react-query';
 import toast, { Toaster } from "react-hot-toast";
+import ReactPaginate from 'react-paginate';
 import SearchBar from "../SearchBar/SearchBar";
 import MovieGrid from "../MovieGrid/MovieGrid";
 import MovieModal from "../MovieModal/MovieModal";
@@ -12,10 +14,15 @@ import css from "./App.module.css";
 
 
 export default function App() {
-  const [movies, setMovies] = useState<Movie[]>([]);
+  const [query, setQuery] = useState('');
+  const [page, setPage] = useState(1);
   const [selectedMovie, setSelectedMovie] = useState<Movie | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
-  const [isError, setIsError] = useState(false);
+  const { data, isLoading, isError, error, isFetching } = useQuery<MovieResponse>({
+    queryKey: ['movies', query, page],
+    queryFn: () => fetchMovies({ query, page }),
+    enabled: !!query,
+    keepPreviousData: true,
+  })
 
   const handleSearch = async (query: string) => {
     if (!query.trim()) {

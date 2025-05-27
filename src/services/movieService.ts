@@ -17,7 +17,7 @@ interface MovieResponse {
 
 export async function fetchMovies({
   query,
-  page = 1,
+  page,
 }: FetchMoviesProps): Promise<MovieResponse> {
    const response = await axios.get<MovieResponse>(
     `https://api.themoviedb.org/3/search/movie?query=${query}&include_adult=false&language=en-US&page=${page}`,
