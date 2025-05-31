@@ -19,7 +19,7 @@ export default function App() {
     queryKey: ['movies', query, page],
     queryFn: () => fetchMovies({ query, page }),
     enabled: query !== '',
-    placeholderData: keepPreviousData,
+    placeholderData: (previousData) => previousData,
   });
 
   const totalPages = data?.total_pages ?? 0;
