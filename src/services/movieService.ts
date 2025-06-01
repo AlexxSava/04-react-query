@@ -17,17 +17,22 @@ interface MovieResponse {
 
 export async function fetchMovies({
   query,
-  page,
+  page = 1, 
 }: FetchMoviesProps): Promise<MovieResponse> {
-   const response = await axios.get<MovieResponse>(
-    `https://api.themoviedb.org/3/search/movie?query=${query}&include_adult=false&language=en-US&page=${page}`,
-    {
-        headers: {
-        Authorization: `Bearer ${API_KEY}`,
-        accept: "application/json",
-      },
-    }
-  );
+  const url = "https://api.themoviedb.org/3/search/movie";
+
+  const response = await axios.get<MovieResponse>(url, {
+    params: {
+      query,
+      include_adult: false,
+      language: "en-US",
+      page, 
+    },
+    headers: {
+      Authorization: `Bearer ${API_KEY}`,
+      Accept: "application/json",
+    },
+  });
 
   return response.data;
 }
